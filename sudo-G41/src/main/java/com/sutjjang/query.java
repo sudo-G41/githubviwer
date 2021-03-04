@@ -1,7 +1,5 @@
 package com.sutjjang;
 
-import java.util.HashMap;
-
 /**
 * 쿼리문을 만들기  위한객체
 * 최초 생성일 : 2021.02.18
@@ -78,6 +76,6 @@ public class query{
 	 * @return the toQuery
 	 */
 	public String getToQuery() {
-		return toQuery;
+		return this.toQuery;
 	}
 }
