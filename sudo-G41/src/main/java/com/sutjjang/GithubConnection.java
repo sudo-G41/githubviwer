@@ -12,12 +12,15 @@ import javax.net.ssl.SSLSession;
 
 /**
 * 쿼리문을 만들기  위한객체
-* 최초 생성일 : 2021.02.19
+* 최초 생성일 : 2021.0
 * 최초 개발자 : sudo-G41(정수철)
 * 마지막 수정일 : 2021.02.20
 * 마지막 수정자 :sudo-G41
 */
+/*
 
+ㅁㄴㅇㄹ
+*/
 public class GithubConnection{
 	private String http;
 	private URL url = null;
