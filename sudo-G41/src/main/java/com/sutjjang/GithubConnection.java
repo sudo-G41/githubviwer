@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Scanner;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -21,6 +22,8 @@ public class GithubConnection{
 	private String http;
 	private URL url = null;
 	private HttpsURLConnection curl = null;
+	private OutputStream os = null;
+	private InputStream is = null;
 	//테스트용restAPI 사용한 것
 	public GithubConnection(){
 		this.http = "https://api.github.com/users/sudo-G41";
@@ -32,7 +35,7 @@ public class GithubConnection{
 			else{
 				System.out.println(url.getClass());
 			}
-			String token = "token ccdb2b758c9907c911eba26ffbd889343c42b633";
+			String token = "token 902f279723060686ee9fef94ba3851b4ad1609f5";
 			this.curl = (HttpsURLConnection)url.openConnection();
 			// if(this.curl==null){
 			// 	System.out.println("curl is null");
@@ -55,10 +58,11 @@ public class GithubConnection{
 		catch(IOException e){
 			e.printStackTrace();
 		}
+
 	}
 	
-	public GithubConnection(String http, String token){
-		token = "token "+token;
+	public GithubConnection(String http, query q){
+		String token = "token 902f279723060686ee9fef94ba3851b4ad1609f5";
 		try{
 			this.http = URLEncoder.encode(http,"UTF-8");
 			this.url = new URL(http);
@@ -83,6 +87,31 @@ public class GithubConnection{
 			System.out.println("connection.java 27line");
 			System.out.println(e);
 		}
+		os = this.getOutput();
+		try {
+			os.write(this.getBytes(q));
+			os.flush();
+			System.out.println(curl.getResponseCode());
+			is = getInput();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Scanner sc = new Scanner(is);
+		String str = sc.nextLine();
+		System.out.println(str);
+		sc.close();
+	}
+	/**
+	 * @return the curl
+	 */
+	public byte[] getBytes(query q) {
+		String query = q.getToQuery();
+		try {
+			return query.getBytes("UTF-8");
+		} catch (Exception e) {
+			System.out.println("get변환 실패");
+			return null;
+		}
 	}
 	/**
 	 * @return the curl
@@ -93,13 +122,12 @@ public class GithubConnection{
 	/**
 	 * @return the curl
 	 */
-	public OutputStream getoutput() {
+	public OutputStream getOutput() {
 		OutputStream os = null;
 		if(this.curl == null){
 			System.out.println("???????????? dksl dho???");
 		}
 		else{
-			System.out.println("여긴 됩니다.");
 			try{
 				System.out.println(this.curl.getOutputStream().getClass());
 			}
@@ -118,18 +146,17 @@ public class GithubConnection{
 			System.out.print("git.java 89 :");
 			e.printStackTrace();
 		}
-		System.out.println("\n\n================================\n" + os.getClass()+" "+os.toString()+"\n================================\n\n");
 		return os;
 	}
 	
-	public InputStream getInputStream(){
+	public InputStream getInput(){
 		InputStream is = null;
 		if(this.curl == null){
 			System.out.println("wpqkf...");
 		}
 		try{
 			is = this.curl.getInputStream();
-			System.out.println("133!!!\n\n\n\n");
+
 		}
 		catch(IOException e){
 			e.printStackTrace();

@@ -24,7 +24,16 @@ public class query{
 	
 	public query(String login){
 		this.login = login;
-		this.toQuery =  "{ user(login: \""+login+"\") { login name repos: repositories { totalCount } contributionsCollection(from: \"2019-01-01T00:00:00Z\", to: \"2019-12-31T00:00:00Z\") {       totalRepositoryContributions totalCommitContributions totalIssueContributions totalPullRequestContributions totalPullRequestReviewContributions } forkstar: repositories(first:100,isFork: false) { totalCount nodes { name forkCount stargazerCount } } followers { totalCount } following { totalCount } } }";
+		// this.toQuery =  "{\"query\" : \"query { user(login: \""+login+"\") { login name repos: repositories { totalCount } contributionsCollection(from: \"2019-01-01T00:00:00Z\", to: \"2019-12-31T00:00:00Z\") {       totalRepositoryContributions totalCommitContributions totalIssueContributions totalPullRequestContributions totalPullRequestReviewContributions } forkstar: repositories(first:100,isFork: false) { totalCount nodes { name forkCount stargazerCount } } followers { totalCount } following { totalCount } } }\"}";
+		this.toQuery = "{\""+
+							"query\": \"query { "+
+								"user(login:\\\"a\\\"){ "+
+									"login "+
+									"name "+
+									"repos: repositories { totalCount } "+
+								"} "+
+							"}"+
+						"\"}";
 	}
 	/**
 	 * @return the login
