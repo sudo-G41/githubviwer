@@ -13,28 +13,57 @@ import java.util.HashMap;
 public class query{
 	private String login;
 	private String name;
+	private String formData, toData;
 	private int repositories;
 	private int contributions;
-	// privaDataata formdata, todata; //날짜 포멧으로 바꿀것
 	private int fork;
 	private int star;
 	private int followers;
 	private int following;
 	private String toQuery;
+	private String answer;
+	
+	public void setFormData(String formData) {
+		this.formData = formData;
+	}
+	public void setToData(String toData) {
+		this.toData = toData;
+	}
 	
 	public query(String login){
 		this.login = login;
-		// this.toQuery =  "{\"query\" : \"query { user(login: \""+login+"\") { login name repos: repositories { totalCount } contributionsCollection(from: \"2019-01-01T00:00:00Z\", to: \"2019-12-31T00:00:00Z\") {       totalRepositoryContributions totalCommitContributions totalIssueContributions totalPullRequestContributions totalPullRequestReviewContributions } forkstar: repositories(first:100,isFork: false) { totalCount nodes { name forkCount stargazerCount } } followers { totalCount } following { totalCount } } }\"}";
-		this.toQuery = "{\""+
-							"query\": \"query { "+
-								"user(login:\\\"a\\\"){ "+
-									"login "+
-									"name "+
-									"repos: repositories { totalCount } "+
-								"} "+
-							"}"+
-						"\"}";
+		setFormData("2019-01-01T00:00:00Z");
+		setToData("2020-01-01T00:00:00Z");
+		this.toQuery = ""+
+		"{\"query\" : "+
+			"\"query {"+
+				"user(login : \\\""+this.login+"\\\"){"+
+					"login, name, "+
+					"repos : repositories {"+
+						"totalCount"+
+					"}, "+
+					"contributionsCollection(from : \\\""+this.formData+"\\\", to : \\\""+this.toData+"\\\"){"+
+						"totalRepositoryContributions, "+
+						"totalCommitContributions, "+
+						"totalIssueContributions, "+
+						"totalPullRequestContributions, "+
+						"totalPullRequestReviewContributions "+
+					"}, "+
+					"forkstar : repositories(first :100, isFork : false){"+
+						"totalCount, "+
+						"nodes{"+
+							"forkCount, "+
+							"stargazerCount "+
+						"}, "+
+					"}, "+
+					"followers{totalCount}, "+
+					"following{totalCount}"+
+				"}"+
+			"}\""+
+		"}";
+		// this.toQuery = "{\"query\" : \" query{ viewer{name, login}} \"}";
 	}
+	
 	/**
 	 * @return the login
 	 */

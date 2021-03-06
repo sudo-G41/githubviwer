@@ -3,6 +3,9 @@ package com.sutjjang;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Scanner;
@@ -20,10 +23,12 @@ import javax.net.ssl.SSLSession;
 */
 public class GithubConnection{
 	private String http;
+	private String token = "token ";
 	private URL url = null;
 	private HttpsURLConnection curl = null;
 	private OutputStream os = null;
 	private InputStream is = null;
+
 	//테스트용restAPI 사용한 것
 	public GithubConnection(){
 		this.http = "https://api.github.com/users/sudo-G41";
@@ -35,7 +40,7 @@ public class GithubConnection{
 			else{
 				System.out.println(url.getClass());
 			}
-			String token = "token 902f279723060686ee9fef94ba3851b4ad1609f5";
+			String token = "token 807669579e51a96bbffba11cff235553300dbf0e";
 			this.curl = (HttpsURLConnection)url.openConnection();
 			// if(this.curl==null){
 			// 	System.out.println("curl is null");
@@ -61,94 +66,162 @@ public class GithubConnection{
 
 	}
 	
-	public GithubConnection(String http, query q){
-		String token = "token 902f279723060686ee9fef94ba3851b4ad1609f5";
+	// public GithubConnection(String http, query q){
+	// 	this.token = "807669579e51a96bbffba11cff235553300dbf0e";
+	// 	try{
+	// 		this.http = URLEncoder.encode(http,"UTF-8");
+	// 		this.url = new URL(http);
+	// 		this.curl = (HttpsURLConnection)url.openConnection();
+	// 		if(this.curl == null||url==null){
+	// 			System.out.println("wpqkfskrkenlwu");
+	// 		}
+	// 		this.curl.setHostnameVerifier(new HostnameVerifier(){
+	// 			@Override
+	// 			public boolean verify(String hostname, SSLSession session) {
+	// 				return false;
+	// 			}
+	// 		});
+	// 		this.curl.setRequestMethod("POST");
+	// 		this.curl.setRequestProperty("Content-Type", "application/json; UTF-8");
+	// 		this.curl.setRequestProperty("Authorization",token);
+	// 		this.curl.setDoInput(true);
+	// 		this.curl.setDoOutput(true);
+	// 		this.curl.connect();
+	// 	}
+	// 	catch(Exception e){
+	// 		System.out.println("connection.java 27line");
+	// 		System.out.println(e);
+	// 	}
+	// 	os = this.getOutput();
+	// 	try {
+	// 		os.write(this.getBytes(q));
+	// 		os.flush();
+	// 		System.out.println(curl.getResponseCode());
+	// 		is = getInput();
+	// 	} catch (IOException e) {
+	// 		e.printStackTrace();
+	// 	}
+	// 	Scanner sc = new Scanner(is);
+	// 	String str = sc.nextLine();
+	// 	System.out.println(str);
+	// 	sc.close();
+	// }
+
+	public GithubConnection(String http, String token){
+		this.token = "token "+token;
+		if(setCurl(http)){
+			System.out.println("Conncetion is null... 왜???");
+			return;//커넥션이 왜인지 모르지만 연결실패해서 망했다는걸 이야기 합니다. 왜??? 그래서 일단 멈추고 볼려고 넣었습니다.. 왜??? 진짜 왜 그러는데???
+		}
+	}
+
+	/**
+	 * set Curl
+	 * HttpsConnection을 설정하는 그런곳 허허
+	 * @return 성공여부 실패하면 false를 리턴합니다.
+	 */
+	public boolean setCurl(String http) {
 		try{
-			this.http = URLEncoder.encode(http,"UTF-8");
-			this.url = new URL(http);
+			System.out.println(this.http);
+			this.http = URLEncoder.encode(http, "UTF-8");
+			this.url = new URL(this.http);
 			this.curl = (HttpsURLConnection)url.openConnection();
-			if(this.curl == null||url==null){
-				System.out.println("wpqkfskrkenlwu");
-			}
-			this.curl.setHostnameVerifier(new HostnameVerifier(){
-				@Override
-				public boolean verify(String hostname, SSLSession session) {
-					return false;
-				}
-			});
 			this.curl.setRequestMethod("POST");
-			this.curl.setRequestProperty("Content-Type", "application/json; U-8");
-			this.curl.setRequestProperty("Authorization",token);
+			this.curl.setRequestProperty("Content-Type", "application/json; UTF-8");
+			this.curl.setRequestProperty("Authorization",this.token);
 			this.curl.setDoInput(true);
 			this.curl.setDoOutput(true);
 			this.curl.connect();
 		}
-		catch(Exception e){
-			System.out.println("connection.java 27line");
-			System.out.println(e);
-		}
-		os = this.getOutput();
-		try {
-			os.write(this.getBytes(q));
-			os.flush();
-			System.out.println(curl.getResponseCode());
-			is = getInput();
-		} catch (IOException e) {
+		catch(UnsupportedEncodingException e){
+			System.out.println("에러 뻥뻥!!\ngithubconnection.java "+" line : "+Thread.currentThread().getStackTrace()[1].getLineNumber()+"\n Method : "+Thread.currentThread().getStackTrace()[1].getMethodName());
 			e.printStackTrace();
 		}
-		Scanner sc = new Scanner(is);
-		String str = sc.nextLine();
-		System.out.println(str);
-		sc.close();
+		catch(MalformedURLException e){
+			System.out.println("에러 뻥뻥!!\ngithubconnection.java "+" line : "+Thread.currentThread().getStackTrace()[1].getLineNumber()+"\n Method : "+Thread.currentThread().getStackTrace()[1].getMethodName());
+			e.printStackTrace();
+		}
+		catch(ProtocolException e){
+			System.out.println("에러 뻥뻥!!\ngithubconnection.java "+" line : "+Thread.currentThread().getStackTrace()[1].getLineNumber()+"\n Method : "+Thread.currentThread().getStackTrace()[1].getMethodName());
+			e.printStackTrace();
+		}
+		catch(IOException e){
+			System.out.println("에러 뻥뻥!!\ngithubconnection.java "+" line : "+Thread.currentThread().getStackTrace()[1].getLineNumber()+"\n Method : "+Thread.currentThread().getStackTrace()[1].getMethodName());
+			e.printStackTrace();
+		}
+		return this.curl == null? false: true;
 	}
+
 	/**
-	 * @return the curl
+	 * set IO
+	 * InputStream과 OutputStream을 설정
+	 */
+	public void setIO(query q) {
+		try{
+			this.os = this.getOutput();
+			this.os.write(this.getBytes(q));
+			this.os.flush();
+		}
+		catch(IOException e){
+			System.out.println("에러 뻥뻥!!\ngithubconnection.java "+" line : "+Thread.currentThread().getStackTrace()[1].getLineNumber()+"\n Method : "+Thread.currentThread().getStackTrace()[1].getMethodName());
+		}
+	}
+
+	/**
+	 * @return the Bytes
 	 */
 	public byte[] getBytes(query q) {
 		String query = q.getToQuery();
 		try {
 			return query.getBytes("UTF-8");
-		} catch (Exception e) {
+		} catch (UnsupportedEncodingException e) {
 			System.out.println("get변환 실패");
 			return null;
 		}
 	}
+
 	/**
 	 * @return the curl
 	 */
 	public HttpsURLConnection getCurl() {
 		return this.curl;
 	}
+
 	/**
-	 * @return the curl
+	 * @return the OutputStream
+	 * Post로 보내기 위한 outputStream을 생성하기 위한 메소드입니다.
 	 */
 	public OutputStream getOutput() {
 		OutputStream os = null;
 		if(this.curl == null){
-			System.out.println("???????????? dksl dho???");
+			System.out.println("???????????? 이걸????? 왜?????????");
 		}
-		else{
-			try{
-				System.out.println(this.curl.getOutputStream().getClass());
-			}
-			catch(IOException e){
-				e.printStackTrace();
-			}
-		}
+		// else{
+		// 	try{
+		// 		System.out.println(this.curl.getOutputStream().getClass());
+		// 	}
+		// 	catch(IOException e){
+		// 		e.printStackTrace();
+		// 	}
+		// }
 		try{
 			os = this.curl.getOutputStream();
 		}
 		catch(IOException e){
-			System.out.print("git.java 85 :");
+			System.out.println("에러 뻥뻥!!\ngithubconnection.java "+" line : "+Thread.currentThread().getStackTrace()[1].getLineNumber()+"\n Method : "+Thread.currentThread().getStackTrace()[1].getMethodName());
 			e.printStackTrace();
 		}
 		catch(NullPointerException e){
-			System.out.print("git.java 89 :");
+			System.out.println("에러 뻥뻥!!\ngithubconnection.java "+" line : "+Thread.currentThread().getStackTrace()[1].getLineNumber()+"\n Method : "+Thread.currentThread().getStackTrace()[1].getMethodName());
 			e.printStackTrace();
 		}
 		return os;
 	}
-	
+
+	/**
+	 * @return the InputStream
+	 * Post로 보내고 받은 리턴을 받기위한 InputStream을 리턴받는다.
+	 */
 	public InputStream getInput(){
 		InputStream is = null;
 		if(this.curl == null){
@@ -156,9 +229,9 @@ public class GithubConnection{
 		}
 		try{
 			is = this.curl.getInputStream();
-
 		}
 		catch(IOException e){
+			System.out.println("에러 뻥뻥!!\ngithubconnection.java "+" line : "+Thread.currentThread().getStackTrace()[1].getLineNumber()+"\n Method : "+Thread.currentThread().getStackTrace()[1].getMethodName());
 			e.printStackTrace();
 		}
 		if(is == null){
