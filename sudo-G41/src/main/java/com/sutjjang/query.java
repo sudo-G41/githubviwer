@@ -63,6 +63,39 @@ public class query{
 		"}";
 		// this.toQuery = "{\"query\" : \" query{ viewer{name, login}} \"}";
 	}
+	public query(String login, String formData, String toData){
+		this.login = login;
+		setFormData(formData);
+		setToData(toData);
+		this.toQuery = ""+
+		"{\"query\" : "+
+			"\"query {"+
+				"user(login : \\\""+this.login+"\\\"){"+
+					"login, name, "+
+					"repos : repositories {"+
+						"totalCount"+
+					"}, "+
+					"contributionsCollection(from : \\\""+this.formData+"\\\", to : \\\""+this.toData+"\\\"){"+
+						"totalRepositoryContributions, "+
+						"totalCommitContributions, "+
+						"totalIssueContributions, "+
+						"totalPullRequestContributions, "+
+						"totalPullRequestReviewContributions "+
+					"}, "+
+					"forkstar : repositories(first :100, isFork : false){"+
+						"totalCount, "+
+						"nodes{"+
+							"forkCount, "+
+							"stargazerCount "+
+						"}, "+
+					"}, "+
+					"followers{totalCount}, "+
+					"following{totalCount}"+
+				"}"+
+			"}\""+
+		"}";
+		// this.toQuery = "{\"query\" : \" query{ viewer{name, login}} \"}";
+	}
 	
 	/**
 	 * @return the login
