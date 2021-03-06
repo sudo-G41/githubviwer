@@ -16,9 +16,9 @@ public class App
 		query q = new query("sudo-G41");
         // System.out.println(q.getToQuery());
         String graphQl = "https://api.github.com/graphql";
-        String token = "807669579e51a96bbffba11cff235553300dbf0e";
+        String token = "747d253418a08b68cb44ebacfd242815608a5205";
         // GithubConnection github = new GithubConnection("https://api.github.com/graphql", q);
-        GithubConnection git = new GithubConnection(graphQl, token);
+        GithubConnection git = new GithubConnection(token);
         git.setIO(q);
         Scanner sc = new Scanner(git.getInput());
         System.out.println(sc.nextLine());
