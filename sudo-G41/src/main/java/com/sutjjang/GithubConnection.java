@@ -156,7 +156,7 @@ public class GithubConnection{
 	 * set IO
 	 * InputStream과 OutputStream을 설정
 	 */
-	public void setIO(query q) {
+	public Scanner setIO(query q) {
 		try{
 			this.os = this.getOutput();
 			this.os.write(this.getBytes(q));
@@ -165,6 +165,7 @@ public class GithubConnection{
 		catch(IOException e){
 			System.out.println("에러 뻥뻥!!\ngithubconnection.java "+" line : "+Thread.currentThread().getStackTrace()[1].getLineNumber()+"\n Method : "+Thread.currentThread().getStackTrace()[1].getMethodName());
 		}
+		return new Scanner(getInput());
 	}
 
 	/**
@@ -231,6 +232,7 @@ public class GithubConnection{
 			is = this.curl.getInputStream();
 		}
 		catch(IOException e){
+			System.out.println("");
 			System.out.println("에러 뻥뻥!!\ngithubconnection.java "+" line : "+Thread.currentThread().getStackTrace()[1].getLineNumber()+"\n Method : "+Thread.currentThread().getStackTrace()[1].getMethodName());
 			e.printStackTrace();
 		}
