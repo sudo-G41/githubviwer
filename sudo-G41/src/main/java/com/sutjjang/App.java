@@ -7,7 +7,7 @@ public class App{
 		System.out.println("Hello World!");
 		query q = new query("sudo-G41");
 		String token;
-		token = "ae0c6e4d086a4e823e5b114aca93f444f3030df9";
+		token = "95be2764e70aef677d04c4a7d261128cf99a0c4d";
 		GithubConnection g = new GithubConnection(token);
 		g.setIO(q);
 		Scanner sc = new Scanner(g.getInput());
